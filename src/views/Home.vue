@@ -3,66 +3,65 @@
     <h1>Home</h1>
     <!--To use a ref from the Composition API use the variable name without binding Ex: ref="p"-->
     <!--No need to use ref.value inside the template-->
-    <p>Subject: {{ name }}</p>
-    <p>Age: {{ age }}</p>
+    <h2>With Refs:</h2>
+    <p>Dweller: {{ dweller.name }}</p>
+    <p>Age: {{ dweller.age }}</p>
 
-    <br />
-    <button @click="handleClick">Click Me!</button>
+    <button @click="updateDweller">Update Dweller</button>
 
-    <br />
-    <button @click="age++">Add age</button>
+    <h2>With Reactive:</h2>
+    <p>Dweller: {{ secondDweller.name }}</p>
+    <p>Age: {{ secondDweller.age }}</p>
 
-    <br />
-    <button @click="age--">Reduce age</button>
-
-    <br />
-    <!--2-way data binding with ref values-->
-    <input type="text" v-model="name" />
+    <button @click="updateSecondDweller">Update Second Dweller</button>
   </div>
 </template>
 
 <script>
 /**Imports ref from vue to use */
-import { ref } from "vue";
+import { ref, reactive } from "vue";
+/**
+ * Reactive cons:
+ * - Primitive types can't be made reactive
+ */
 export default {
   name: "Home",
   //Composition API function
   setup() {
     //Will run before all the lifecycle hooks (first to execute to setup all)
-
     //JS can be written
-    ////This values aren't reactive
-    //let name = "Jvnko";
-    //let age = 20;
 
     //Refs can be used to apply reactivity to values built in setup
     //This values are reactive
-    const name = ref("Jvnko");
-    const age = ref(21);
+    const dweller = ref({
+      name: "Jvnko",
+      age: 20,
+    });
 
-    //Refs creation (to use normal JS with this)
-    //const p = ref(null); //Initially its null
+    //Reactive can be used to apply reactivity to values built in setup
+    const secondDweller = reactive({
+      name: "Furuta",
+      age: 22,
+    });
 
-    const handleClick = () => {
-      //Wait for DOM refs to be attached
+    /**Update dweller */
+    const updateDweller = () => {
+      //Because this is a ref value needs to be used
+      dweller.value.age = 21;
+    };
 
-      // if (p.value !== null) {
-      //   //Only allow when the ref is attached to the DOM element
-      //   p.value.classList.add("test");
-      //   p.value.textContent = "Good morning!";
-      // }
-
-      //Because refs are reactive this will update the template values
-      name.value = "Furuta";
-      age.value = 20;
+    /**Update second dweller */
+    const updateSecondDweller = () => {
+      //Reactive uses direct access
+      secondDweller.age = 20;
     };
 
     //Return data to use in the template
     return {
-      name, //This can be used in the template
-      age, //This can be used in the template
-      handleClick, //This can be used in the template
-      //p, //Return the ref to assing it to a DOM elment
+      dweller,
+      secondDweller,
+      updateDweller,
+      updateSecondDweller,
     };
   },
 };
