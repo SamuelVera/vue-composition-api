@@ -1,9 +1,13 @@
 <template>
   <div class="home">
     <h1>Home</h1>
-    <PostsList v-if="showPosts" :posts="posts" />
-    <button @click="showPosts = !showPosts">Toggle Posts</button>
-    <button @click="posts.pop()">Pop post</button>
+    <PostsList v-if="posts.length" :posts="posts" />
+    <div v-else>
+      <p>Loading...</p>
+    </div>
+    <div v-if="error">
+      {{ error }}
+    </div>
   </div>
 </template>
 
@@ -23,28 +27,35 @@ export default {
     //JS can be written
 
     /**Posts */
-    const posts = ref([
-      {
-        title: "Welcome to the blog",
-        body:
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur maiores fugiat architecto fugit mollitia aliquid obcaecati provident, recusandae iusto eligendi culpa deserunt repellendus fuga tenetur adipisci reiciendis quia doloribus perspiciatis sunt optio. Amet totam pariatur est minus velit? Animi, labore nisi repudiandae hic excepturi mollitia quae quos similique consectetur vel dignissimos magnam, saepe cupiditate eius! Nam delectus iste pariatur est labore accusantium vitae commodi quis impedit, minima sit, expedita, harum maiores animi cumque quas ex quam blanditiis omnis perferendis iure facere cum nostrum facilis. Libero error sunt enim omnis earum odio. Inventore et aliquam eum aut neque quis, minima repellat!",
-        id: 1,
-      },
-      {
-        title: "Top 5 CSS tips",
-        body:
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur maiores fugiat architecto fugit mollitia aliquid obcaecati provident, recusandae iusto eligendi culpa deserunt repellendus fuga tenetur adipisci reiciendis quia doloribus perspiciatis sunt optio. Amet totam pariatur est minus velit? Animi, labore nisi repudiandae hic excepturi mollitia quae quos similique consectetur vel dignissimos magnam, saepe cupiditate eius! Nam delectus iste pariatur est labore accusantium vitae commodi quis impedit, minima sit, expedita, harum maiores animi cumque quas ex quam blanditiis omnis perferendis iure facere cum nostrum facilis. Libero error sunt enim omnis earum odio. Inventore et aliquam eum aut neque quis, minima repellat!",
-        id: 2,
-      },
-    ]);
+    const posts = ref([]); //Initial value is empty
+    /**Error tracker */
+    const error = ref(null); //Initially null
 
-    /**Show posts or not */
-    const showPosts = ref(true);
+    /**Load posts */
+    const loadPosts = async () => {
+      try {
+        const res = await fetch("http://localhost:3000/posts");
+        if (!res.ok) {
+          //Check not OK
+          throw Error("No data available!");
+        }
+        //Save posts
+        posts.value = await res.json();
+        //Reset error
+        error.value = null;
+      } catch (err) {
+        console.log(err);
+        error.value = err.message;
+      }
+    };
+
+    //Execute posts fetching
+    loadPosts();
 
     //To use in the template
     return {
       posts,
-      showPosts,
+      error,
     };
   },
   components: {
