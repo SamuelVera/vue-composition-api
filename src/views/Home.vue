@@ -1,12 +1,14 @@
 <template>
   <div class="home">
     <h1>Home</h1>
-    <PostsList :posts="posts" />
+    <PostsList v-if="showPosts" :posts="posts" />
+    <button @click="showPosts = !showPosts">Toggle Posts</button>
+    <button @click="posts.pop()">Pop post</button>
   </div>
 </template>
 
 <script>
-import { computed, ref, watch, watchEffect } from "vue";
+import { ref } from "vue";
 //Posts list component
 import PostsList from "../components/PostList.component";
 /**
@@ -36,9 +38,13 @@ export default {
       },
     ]);
 
+    /**Show posts or not */
+    const showPosts = ref(true);
+
     //To use in the template
     return {
       posts,
+      showPosts,
     };
   },
   components: {

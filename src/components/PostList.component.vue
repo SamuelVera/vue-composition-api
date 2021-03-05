@@ -7,14 +7,28 @@
 </template>
 
 <script>
+//Imported lifecycle hooks
+import { onMounted, onUnmounted, onUpdated } from "vue";
 /**Single post component */
 import SinglePost from "./SinglePost.component";
 export default {
   //Accept the props post
   props: ["posts"],
   //Using the props inside the setup function
-  setup(props) {
-    console.log(props.posts);
+  setup() {
+    //Import the lifecycle hooks from Composition API
+    //When component is mounted into the DOM
+    onMounted(() => {
+      console.log("Component mounted");
+    });
+    //When component is unmounted into the DOM
+    onUnmounted(() => {
+      console.log("Component unmounted");
+    });
+    //When component is updated in the DOM
+    onUpdated(() => {
+      console.log("Component updated");
+    });
   },
   //Components
   components: {
