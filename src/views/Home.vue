@@ -6,11 +6,12 @@
     <div v-for="name in matchingNames" :key="name">
       <p>{{ name }}</p>
     </div>
+    <button @click="stopWatching">Stop watchers</button>
   </div>
 </template>
 
 <script>
-import { computed, ref } from "vue";
+import { computed, ref, watch, watchEffect } from "vue";
 /**
  * Reactive cons:
  * - Primitive types can't be made reactive
@@ -31,8 +32,32 @@ export default {
     const matchingNames = computed(() => {
       return names.value.filter((name) => name.includes(searchQuery.value));
     });
+
+    //Watch is used to watch changes over a value
+    //Setup a watch over the search query to execute code
+    const searchWatcher = watch(
+      searchQuery, //What wants to be watched
+      () => {
+        //Trigger on changes for watched value
+        console.log(searchQuery.value);
+      }
+    );
+
+    //Watch effect, runs everytime a value inside the calllback changes
+    const effectWatcher = watchEffect(() => {
+      //Callback
+      //Can be used to get data from an API
+      console.log("From effect", searchQuery.value);
+    });
+
+    //To stop the watching the functions need to be invoked
+    const stopWatching = () => {
+      effectWatcher();
+      searchWatcher();
+    };
+
     //To use in the template
-    return { searchQuery, matchingNames };
+    return { searchQuery, matchingNames, stopWatching };
   },
 };
 </script>
