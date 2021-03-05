@@ -17,6 +17,7 @@ export default {
   //Using the props inside the setup function
   setup() {
     //Import the lifecycle hooks from Composition API
+    //Compositions API and Options API don't override each other
     //When component is mounted into the DOM
     onMounted(() => {
       console.log("Component mounted");
