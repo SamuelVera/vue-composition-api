@@ -6,9 +6,8 @@
       "body": "Lorem ipsum dolor sit amet",
       "tags": ["webdev", "coding", "news"]
     },
-
     {
-      "id": 1,
+      "id": 2,
       "title": "Top 5 CSS Tricks",
       "body": "Lorem ipsum dolor sit amet",
       "tags": ["webdev", "coding", "coding"]
